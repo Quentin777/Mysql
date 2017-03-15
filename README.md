@@ -1,1 +1,3 @@
 # Mysql
+
+Exercice Mysql.
