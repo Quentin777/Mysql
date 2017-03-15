@@ -6,6 +6,11 @@ input[type="number"] {
   input[type="checkbox"]:checked ~ input[type="number"] {
     display: inline; }
 
+select[type="typecarte"] {
+  display: none; }
+  select[type="checkbox"]:checked ~ select[type="typecarte"] {
+    display: inline; }
+
 li.danger {
   color: red; }
 li.sucess {

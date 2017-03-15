@@ -1,120 +1,99 @@
 <?php
-$pdo = new PDO('mysql:dbname=colyseum;host=localhost; charset=utf8', 'root', '');
-$pdo->setAttribute(
-	PDO::ATTR_ERRMODE, 
-	PDO::ERRMODE_EXCEPTION);
-$pdo->setAttribute(
-	PDO::ATTR_DEFAULT_FETCH_MODE, 
-	PDO::FETCH_OBJ);
+  $message = [];
+   $donnee = [];
+      $pdo= new PDO('mysql:host=localhost;dbname=colyseum;charset=utf8','root','');
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_OBJ);
+   $statement=$pdo->query('SELECT id, type FROM cardTypes');
+   $typedecarte=$statement->fetchAll();
 
-$statement =$pdo->query('SELECT id, type FROM cardTypes');
-$typedecarte = $statement-> fetchall();
-//echo "<pre>";
-//var_dump($typedecarte);
-//echo "<pre>";
-//die()
+  if(isset($_POST)&& !empty($_POST)){
+   
+
+      if(isset($_POST['nom']) && $_POST['nom']!='') {
+          $donnee['lastName'] = $_POST['nom'];
+      }else{
+          $message['danger'][] = 'Merci de mettre un nom';
+      }
+      if(isset($_POST['prenom']) && $_POST['prenom']!='') {
+          $donnee['firstName'] = $_POST['prenom'];
+      }else{
+          $message['danger'][] = 'Merci de mettre un prénom';
+      }
+      if(isset($_POST['date'])) {
+          $donnee['birthDate'] = $_POST['date'];
+      }else{
+          $message['danger'][] = 'Merci de mettre une date de naissance';
+      }
+      if(isset($_POST['card'])) {
+          $donnee['card'] = 1;
+          if(isset($_POST['cardNumber'])){
+              $donnee['cardNumber'] = $_POST['cardNumber'];
+          }else{
+              $message['danger'][] = 'Merci de mettre un numéro de carte';
+          }
+      }else{
+          $donnee['card'] = 0;
+          $donnee['cardNumber'] = null;
+      }    
+ 
+
+  if(empty($message)){
+
+      $req = $pdo->prepare("    INSERT INTO clients
+                              SET     lastName= :lastName,
+                                      firstName= :firstName,
+                                      birthDate= :birthDate,
+                                      card= :card,
+                                      cardNumber= :cardNumber
+                          ");
+      $req->execute($donnee);
+
+      $message['success'][] = 'le client est bien ajouté';
+
+
+   
+  }
+}
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
-	<title>FORMAULAIRE</title>
-		<link rel="stylesheet" type="text/css" href="style/style.css">
-	
+<a href="index2.php">RETOUR</a>
+  <link rel="stylesheet" type="text/css" href="style/style.css">
+  <title>Ajout client</title>
 </head>
 <body>
-<?php
-$erreur = [];
-if (isset($_POST) && !empty($_POST)) {
-	$donner=[];
-		if (isset($_POST["nom"]) && $_POST['nom']!='') {
-			$donner['lastname'] = $_POST["nom"];
-		}else{
-			$erreur[] = 'merci de mettre un nom';
-		}
-		if (isset($_POST["prenom"]) && $_POST['prenom']!='') {
-			$donner['firstName'] = $_POST["prenom"];
-		}else{
-			$erreur[] = 'merci de mettre un prenom';
-		}
-		if (isset($_POST["naissance"]) && $_POST['naissance']!='') {
-			$donner['birthDate'] = $_POST["naissance"];
-		}else{
-			$erreur[] = 'merci de mettre une date naissance';
-		}
-		if (isset($_POST["card"])) {
-			$donner['card'] = 1;
-		
-				if (isset($_POST["numeCard"])) {
-				$donner['cardNumber'] = $_POST["numeCard"];
-				}else{
-				$erreur[] = 'merci de mettre un numéro carte';
-				}
-				if 
-		}else{
-			$donner['card'] = 0;
-			$donner['cardNumber'] = null;
-		}
+  <ul>
+      <?php
+           foreach ($message as $key => $tableau) {
+                  foreach ($tableau as $value) {
+                      echo "<li class=\"$key\">$value</li>";
+              }
+          }
+      ?>
+  </ul>
+  <form method="post" action="">
+      <label for="nom">Nom</label>
+      <input type="text" name="nom" maxlength="45" id="nom">
+      <label for="prenom">Prénom</label>
+      <input type="text" name="prenom" maxlength="45" id="prenom">
+      <label for="date">Date de naissance</label>
+      <input type="date" name="date" id="date">
+      <input type="checkbox" name="card" id="card">Oui
+       <input type="number" name="cardNumber" placeholder="numéro de carte">
+       <select name='typecarte'>
 
-		if (empty($erreur)) {
-			/*INSERT TO INTO nomdelatable SET*/
-			$statement = $pdo->prepare("
-				INSERT INTO clients
-				SET lastname = :lastname,
-				firstName = :firstName,
-				birthDate = :birthDate,
-				card = :card,
-				cardNumber = :cardNumber");
-
-			$statement = $pdo->prepare("
-				INSERT INTO card
-				SET cardNumber = :cardNumber,
-				cardTypesId = :cardTypesId,
-				");
-/*			echo "<pre>";
-var_dump($donner);*/
-			$statement->execute($donner);
-$erreur[] = "<div class='list-group-item list-group-item-success'>le client est bien ADD'</div>";
-			
-		}
-	}
-/*if (isset($_POST["name"],$_POST["prenom"],$_POST["naissance"],$_POST["card"])) {
-	$nom = $_POST["name"];
-	$prenom = $_POST["prenom"];
-	$card = $_POST["card"];
-	echo "post effectué";
-}*/
-?>
-<h1> Ajout de client </h1>
-<nav class="navbar navbar-inverse">
-  ...
-</nav>
+        <?php
+               foreach ($typedecarte as$value) {
+                   echo '<option value="'.$value->id.'">'.$value->type.'</option>';
+               }
+           ?>
+           
+       </select>
+      <button type="submit">ok</button>
+  </form>
 
 
-
-
-
-<?php foreach ($erreur as $value) {
-	echo "<li class='list-group-item list-group-item-danger'> $value <li> <br>" ;
-}
-?>
-
-<form method="post" action="">
-	<input type="text" name="nom" placeholder="nom">
-	<input type="text" name="prenom" placeholder="prenom">
-	<input type="date" name="naissance">
-	<label for="card"> le client veut il une carte de fidélité</label> <!-- pour mettre un texte devant checkbox-->
-	<input type="checkbox" name="card" id="card">
-	<FORM>
-		<select type="typedecarte" name="typecarte" size="1">
-		<<?php foreach ($typedecarte as $value) {
-			echo '<OPTION valeur="'.$value->id.'">'.$value->type.'</OPTION>';
-		} 
-		?>
-		</SELECT>
-	</FORM>
-	<input type="number" name="numeCard" placeholder="numéro de la carte">
-	<button type="submit">Ok</button>
-</form>
 </body>
 </html>

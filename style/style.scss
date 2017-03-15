@@ -9,11 +9,17 @@ input[type="number"]{
     display:none;
 
     input[type="checkbox"]:checked ~ &{
-    
             display:inline;
+            
     }
 }
 
+select[type="typecarte"]{
+	display:none;
+	select[type="checkbox"]:checked ~ &{
+            	display: inline;
+    }
+}
 
 
 li{
