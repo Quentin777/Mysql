@@ -17,8 +17,12 @@
    // 	");
     $resultatExo2 = $statement->fetchall();
 
+//////////////////////////////////////////////////////////////
+
     $statement = $pdo->query("SELECT * FROM clients");
     $resultatExoe = $statement -> fetchall();
+
+//////////////////////////////////////////////////////////////
 
     $statement = $pdo->query("
     	SELECT firstName,lastName 
@@ -28,6 +32,16 @@
     	ORDER BY lastName
     	");
     $resultatExo5 = $statement->fetchall();
+
+//////////////////////////////////////////////////////////////
+
+    $statement = $pdo->query('SELECT * FROM shows ORDER BY title');
+    $resultatExo6 = $statement->fetchall();
+
+//////////////////////////////////////////////////////////////
+
+    $statement = $pdo->query('SELECT * FROM clients');
+    $resultatExo7 = $statement-> fetchall();
 
     $pdo= null;
 //}
@@ -107,9 +121,19 @@
 
 <h2>exo6</h2>
 <!-- afficher le titre de tout les spectacle ainsi que la date et l'heure et trier les tries by order alphabethique-->
+<?php foreach ($resultatExo6 as $value) :?>
+
+	<p>le spectacle: <?=$value->title?> par <?=$value->performer?> sera le <?=$value->date?>  et commencera à partir de <?=$value->startTime?></p>
+<?php endforeach; ?>
 
 
-spectacle par artiste, le date à tel heure
+<h2> exo7 </h2>
+<?php foreach ($resultatExo7 as $value) :?>
+	<p>nom: <?=$value->lastName?> prenom:<?=$value->firstName?> Date de naissance:<?=$value->birthDate?> carte de fidelité:<?=$value->card?> carte de fidelite:<?=$value->cardNumber?></p>
+echo($value->card == 0)?'non':'oui numero de la carte:'.$value->cardNumber;
+
+----------------
+<?php endforeach; ?>
 
 </body>
 </html>
