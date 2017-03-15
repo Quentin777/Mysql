@@ -1,2 +1,10 @@
 body {
   background-color: #3498db; }
+
+/*input[type="number"]{
+	display: none;
+	& + input[type="number"]:checked{
+		display: block;
+	}
+}
+*/

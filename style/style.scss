@@ -5,6 +5,10 @@ body{
 	background-color : $background;
 }
 
-td{
-	
+/*input[type="number"]{
+	display: none;
+	& + input[type="number"]:checked{
+		display: block;
+	}
 }
+*/
