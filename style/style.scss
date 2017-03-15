@@ -5,10 +5,22 @@ body{
 	background-color : $background;
 }
 
-/*input[type="number"]{
-	display: none;
-	& + input[type="number"]:checked{
-		display: block;
+input[type="number"]{
+    display:none;
+
+    input[type="checkbox"]:checked ~ &{
+    
+            display:inline;
+    }
+}
+
+
+
+li{
+	&.danger{
+		color : red;
+	}
+	&.sucess{
+		color : green;
 	}
 }
-*/
