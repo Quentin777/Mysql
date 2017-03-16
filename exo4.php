@@ -91,7 +91,7 @@
 <html>
 <head>
 	<title>ajout de spectacle</title>
-	<link rel="stylesheet" type="text/css" href="style/css/style.css">
+	<link rel="stylesheet" type="text/css" href="style/style.css">
 	<script type="text/javascript">
 		function choix(form){
 			
